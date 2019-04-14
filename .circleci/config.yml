@@ -1,0 +1,26 @@
+version: 2
+jobs:
+  tflint:
+    docker:
+    - image: wata727/tflint
+    working_directory: ~/tf
+    steps:
+      - checkout
+      - run:
+          name: tflint
+          command: tflint --error-with-issues
+  terraform_init:
+    docker:
+    - image: hashicorp/terraform:light
+    working_directory: ~/tf
+    steps:
+      - checkout
+      - run:
+          name: init
+          command: terraform init
+workflows:
+  version: 2
+  terraform_jobs:
+    jobs:
+      - tflint
+      - terraform_init
